@@ -11,6 +11,21 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.body,
       }),
     }),
+    getComments: build.query<GetCommentsApiResponse, GetCommentsApiArg>({
+      query: (queryArg) => ({
+        url: `/api/user-emojis/${queryArg.userEmojiId}/comments`,
+      }),
+    }),
+    createComment: build.mutation<
+      CreateCommentApiResponse,
+      CreateCommentApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/user-emojis/${queryArg.userEmojiId}/comments`,
+        method: 'POST',
+        body: queryArg.commentCreateRequest,
+      }),
+    }),
     getUserEmojiDetail: build.query<
       GetUserEmojiDetailApiResponse,
       GetUserEmojiDetailApiArg
@@ -49,6 +64,16 @@ export type CreateUserEmojiApiArg = {
     images?: Blob[]
   }
 }
+export type GetCommentsApiResponse =
+  /** status 200 OK */ ApiResponseListCommentResponse
+export type GetCommentsApiArg = {
+  userEmojiId: number
+}
+export type CreateCommentApiResponse = /** status 200 OK */ ApiResponseVoid
+export type CreateCommentApiArg = {
+  userEmojiId: number
+  commentCreateRequest: CommentCreateRequest
+}
 export type GetUserEmojiDetailApiResponse =
   /** status 200 OK */ ApiResponseUserEmojiDetailResponse
 export type GetUserEmojiDetailApiArg = {
@@ -75,6 +100,25 @@ export type UserEmojiCreateRequest = {
   /** 내용 */
   text?: string
 }
+export type CommentResponse = {
+  commentId?: number
+  content?: string
+  authorNickname?: string
+  createdAt?: string
+}
+export type ApiResponseListCommentResponse = {
+  code?: string
+  message?: string
+  data?: CommentResponse[]
+}
+export type ApiResponseVoid = {
+  code?: string
+  message?: string
+  data?: object
+}
+export type CommentCreateRequest = {
+  content?: string
+}
 export type UserEmojiDetailResponse = {
   /** 유저 이모지 번호 */
   userEmojiId?: number
@@ -93,11 +137,6 @@ export type ApiResponseUserEmojiDetailResponse = {
   code?: string
   message?: string
   data?: UserEmojiDetailResponse
-}
-export type ApiResponseVoid = {
-  code?: string
-  message?: string
-  data?: object
 }
 export type LatestMyEmojiResponse = {
   /** 유저 이모지 번호 */
@@ -136,6 +175,9 @@ export type ApiResponseUserEmojiHighlightsResponse = {
 }
 export const {
   useCreateUserEmojiMutation,
+  useGetCommentsQuery,
+  useLazyGetCommentsQuery,
+  useCreateCommentMutation,
   useGetUserEmojiDetailQuery,
   useLazyGetUserEmojiDetailQuery,
   useDeleteUserEmojiMutation,

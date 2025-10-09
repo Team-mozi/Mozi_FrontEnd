@@ -210,6 +210,8 @@ export type EmailVerificationRequest = {
 export type PasswordResetRequest = {
   /** 인증 완료된 이메일 */
   email: string
+  /** 이메일로 발송된 인증 코드 */
+  verificationCode: string
   /** 새로운 비밀번호 */
   newPassword: string
 }
