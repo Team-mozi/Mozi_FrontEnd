@@ -46,6 +46,7 @@ export const useLogin = () => {
           setCredentials({
             isLoggedIn: true, // 로그인 상태
             accessToken: result.data.accessToken, // 액세스 토큰
+            refreshToken: result.data.refreshToken,
             userId: result.data.userId ?? 0, // ID 값
             nickname: result.data.nickname ?? '', // 닉네임
             email, // 이메일

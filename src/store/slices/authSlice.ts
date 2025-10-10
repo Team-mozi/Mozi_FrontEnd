@@ -4,6 +4,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 export interface AuthState {
   isLoggedIn: boolean // 로그인 여부
   accessToken?: string // 로그인 성공 시 발급받은 JWT 토큰
+  refreshToken?: string //
   userId?: number // 로그인한 사용자 ID
   nickname?: string // 사용자 닉네임
   email?: string // 사용자 이메일
@@ -13,6 +14,7 @@ export interface AuthState {
 const initialState: AuthState = {
   isLoggedIn: false, // 기본값은 로그인 안 된 상태
   accessToken: undefined,
+  refreshToken: undefined,
   userId: undefined,
   nickname: undefined,
   email: undefined,
@@ -32,13 +34,10 @@ const authSlice = createSlice({
   initialState, // 초기 상태
   reducers: {
     // 로그인 성공 시 상태 업데이트
-    setCredentials: (state, action: PayloadAction<AuthState>) => {
-      state.isLoggedIn = true // 로그인 상태 true로 변경
-      state.accessToken = action.payload.accessToken
-      state.userId = action.payload.userId
-      state.nickname = action.payload.nickname
-      state.email = action.payload.email
-      // localStorage에도 상태 저장 → 새로고침 시 유지
+
+    setCredentials: (state, action: PayloadAction<Partial<AuthState>>) => {
+      Object.assign(state, action.payload)
+      state.isLoggedIn = !!state.accessToken
       localStorage.setItem('auth', JSON.stringify(state))
     },
 
@@ -46,6 +45,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.isLoggedIn = false
       state.accessToken = undefined
+      state.refreshToken = undefined
       state.userId = undefined
       state.nickname = undefined
       state.email = undefined
