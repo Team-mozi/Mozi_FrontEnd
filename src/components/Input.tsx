@@ -20,6 +20,7 @@ type InputProps = {
   showError?: boolean // 에러 메시지 표시 여부
   onErrorChange?: (error: string) => void
   timer?: React.ReactNode // 타이머
+  disabled?: boolean // 비활성화
 }
 
 const Input = ({
@@ -42,6 +43,7 @@ const Input = ({
   showError = true,
   onErrorChange,
   timer,
+  disabled = false,
 }: InputProps) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
@@ -107,6 +109,7 @@ const Input = ({
           onChange={handleChange}
           minLength={minLength}
           maxLength={maxLength}
+          disabled={disabled}
           className={`h-12 border rounded-xl px-4 transition-colors duration-300 focus:outline-none focus:ring-1 hover:border-orange_three font-normal text-sm sm:text-base 
             ${hasShadow ? 'shadow-md' : ''}
             ${inputPaddingRightClass}

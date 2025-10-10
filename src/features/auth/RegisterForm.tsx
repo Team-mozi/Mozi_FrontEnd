@@ -22,6 +22,8 @@ const RegisterForm = () => {
     handleSendVerification,
     handleConfirmVerification,
     handleSignup,
+    emailConfirmError,
+    setEmailConfirmError,
   } = useRegister()
 
   const [emailError, setEmailError] = useState('')
@@ -70,6 +72,7 @@ const RegisterForm = () => {
             errorMessage={emailError}
             showError={!!emailError}
             onErrorChange={setEmailError}
+            disabled={isEmailVerified}
           />
           <Button
             label={
@@ -99,18 +102,20 @@ const RegisterForm = () => {
             errorMessage={
               emailVerifyMessage ? (
                 <span className='text-green_two'>{emailVerifyMessage}</span>
-              ) : emailError ? (
-                <span className='text-red_one'>{emailError}</span>
+              ) : emailConfirmError ? (
+                <span className='text-red_one'>{emailConfirmError}</span>
               ) : undefined
             }
-            showError={!!emailVerifyMessage || !!emailError}
-            onErrorChange={setEmailError}
+            showError={!!emailVerifyMessage || !!emailConfirmError}
+            onErrorChange={setEmailConfirmError}
             timer={
               verificationTimer.isActive
                 ? formatTime(verificationTimer.timeLeft)
                 : null
             }
+            disabled={isEmailVerified}
           />
+
           <Button
             label='인증 확인'
             type='button'

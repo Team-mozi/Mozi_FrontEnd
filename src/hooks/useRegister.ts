@@ -17,6 +17,7 @@ export const useRegister = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [verificationCode, setVerificationCode] = useState('')
+  const [emailConfirmError, setEmailConfirmError] = useState('')
 
   // 비밀번호 불일치 오류 메시지
   const [passwordMatchError, setPasswordMatchError] = useState('')
@@ -118,9 +119,9 @@ export const useRegister = () => {
       const userMessage = hasMessage(err)
         ? err.data.message
         : '인증에 실패했습니다.'
-      setApiError(userMessage)
       setIsEmailVerified(false)
-      console.error('인증 실패', err)
+      setEmailConfirmError(userMessage)
+      setEmailVerifyMessage('')
     }
   }
 
@@ -174,5 +175,7 @@ export const useRegister = () => {
     handleSendVerification,
     handleConfirmVerification,
     handleSignup,
+    emailConfirmError,
+    setEmailConfirmError,
   }
 }
