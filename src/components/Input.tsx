@@ -19,6 +19,8 @@ type InputProps = {
   containerClassName?: string // input 컨테이너 스타일 커스터마이징
   showError?: boolean // 에러 메시지 표시 여부
   onErrorChange?: (error: string) => void
+  timer?: React.ReactNode // 타이머
+  disabled?: boolean // 비활성화
 }
 
 const Input = ({
@@ -40,6 +42,8 @@ const Input = ({
   containerClassName = '',
   showError = true,
   onErrorChange,
+  timer,
+  disabled = false,
 }: InputProps) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
@@ -105,10 +109,12 @@ const Input = ({
           onChange={handleChange}
           minLength={minLength}
           maxLength={maxLength}
+          disabled={disabled}
           className={`h-12 border rounded-xl px-4 transition-colors duration-300 focus:outline-none focus:ring-1 hover:border-orange_three font-normal text-sm sm:text-base 
             ${hasShadow ? 'shadow-md' : ''}
-            ${error || errorMessage ? 'focus:ring-red-500' : 'focus:ring-orange_three'}
             ${inputPaddingRightClass}
+            ${timer} 
+            ${error || errorMessage ? 'focus:ring-red-500' : 'focus:ring-orange_three'}
             placeholder-gray_one
             placeholder:font-light
             ${inputSizeClasses[size]}
@@ -116,15 +122,21 @@ const Input = ({
         />
         {/* 입력 길이 표시 조건부 렌더링 */}
         {showLength && maxLength && (
-          <span className='absolute right-4 top-1/2 -translate-y-1/2 text-gray_one text-xs pointer-events-none'>
+          <span className='absolute right-4 top-12 text-gray_one text-xs pointer-events-none'>
             {value.length}/{maxLength}
+          </span>
+        )}
+        {/* timer 표시 */}
+        {timer && (
+          <span className='absolute right-4 top-12 text-gray_one text-xs pointer-events-none'>
+            {timer}
           </span>
         )}
       </div>
       {/* 에러 메시지 조건부 렌더링 */}
       {showError && (errorMessage || error) && (
         <p
-          className={`absolute -bottom-5 text-[10px] sm:text-[12px] mt-1 ${errorClassName}`}
+          className={`absolute -bottom-5 px-2 text-[10px] sm:text-[12px] mt-1 ${errorClassName}`}
         >
           {errorMessage || error}
         </p>

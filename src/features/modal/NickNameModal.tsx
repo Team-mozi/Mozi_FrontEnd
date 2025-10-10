@@ -130,6 +130,7 @@ const NicknameForm = ({ onClose }: NicknameModalProps) => {
           required
           minLength={2}
           maxLength={20}
+          showLength
           onChange={(value) => setNickname(value)}
           errorMessage={error}
         />
