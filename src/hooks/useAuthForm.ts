@@ -131,8 +131,11 @@ export const useAuthForm = (mode: AuthMode) => {
         ? err.data.message
         : '인증에 실패했습니다.'
       setIsEmailVerified(false)
-      setEmailConfirmError(userMessage)
       setEmailVerifyMessage('')
+      showToast({
+        message: userMessage,
+        messageType: 'error',
+      })
     }
   }
 

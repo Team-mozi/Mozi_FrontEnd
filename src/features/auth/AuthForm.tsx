@@ -17,7 +17,6 @@ const AuthForm = ({
   confirmPassword,
   passwordMatchError,
   isLoading,
-  emailVerifyMessage,
   verificationCode,
   setVerificationCode,
   isEmailVerified,
@@ -26,7 +25,6 @@ const AuthForm = ({
   handleSendVerification,
   handleConfirmVerification,
   handleSubmit,
-  emailConfirmError,
   submitButtonLabel,
   mode,
 }: AuthFormProps) => {
@@ -150,18 +148,13 @@ const AuthForm = ({
                 placeholder='인증 번호'
                 onChange={(v) => setVerificationCode(v)}
                 containerClassName='flex-1'
-                errorMessage={
-                  emailConfirmError ? (
-                    <span className='text-red_one'>{emailConfirmError}</span>
-                  ) : undefined
-                }
-                showError={!!emailVerifyMessage || !!emailConfirmError}
+                showError={false}
                 timer={
                   verificationTimer.isActive
                     ? formatTime(verificationTimer.timeLeft)
                     : null
                 }
-                disabled={isAuthComplete}
+                disabled={!isEmailSent || isAuthComplete}
               />
               <Button
                 label='인증 확인'
