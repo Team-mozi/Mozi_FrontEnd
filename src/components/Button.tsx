@@ -33,7 +33,7 @@ const Button = ({
   // size prop에 따라 다르게 적용되는 너비 스타일을 정의합니다.
   const buttonSizeClasses =
     size === 's'
-      ? 'w-[140px]' // 140px
+      ? 'w-[120px]' // 140px
       : size === 'm'
         ? 'w-40 ' // 160px
         : size === 'l'

@@ -61,8 +61,7 @@ const Input = ({
 
     if (type === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      if (!emailRegex.test(inputValue))
-        return '이메일 주소를 정확히 입력해주세요.'
+      if (!emailRegex.test(inputValue)) return '이메일을 다시 입력해주세요.'
     }
 
     if (type === 'password') {
@@ -136,7 +135,7 @@ const Input = ({
       {/* 에러 메시지 조건부 렌더링 */}
       {showError && (errorMessage || error) && (
         <p
-          className={`absolute -bottom-5 px-2 text-[10px] sm:text-[12px] mt-1 ${errorClassName}`}
+          className={`absolute -bottom-5 px-1 text-[10px] sm:text-[12px] mt-1 ${errorClassName}`}
         >
           {errorMessage || error}
         </p>
