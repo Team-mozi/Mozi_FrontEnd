@@ -33,6 +33,7 @@ const AuthForm = ({
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const isMobile = useMobile() // 모바일 구분
+  const [isEmailSent, setIsEmailSent] = useState(false)
 
   // 타이머 훅
   const verificationTimer = useTimer(300)
@@ -48,6 +49,7 @@ const AuthForm = ({
     if (isSuccess) {
       verificationTimer.start()
       resendTimer.start()
+      setIsEmailSent(true)
     }
   }
 
@@ -87,8 +89,8 @@ const AuthForm = ({
   const showAuthFields =
     mode === 'register' || (mode === 'passwordReset' && !isEmailVerified)
 
-  // 비밀번호 찾기 모드에서 인증 완료 시 이메일/인증 필드는 비활성화
-  const isAuthFieldsDisabled = isEmailVerified && mode === 'passwordReset'
+  // 인증 완료 후 인증 관련 input/button disable 처리
+  const isAuthComplete = isEmailVerified
 
   // 모바일 상단 헤더
   const MobileHeader = (
@@ -118,12 +120,12 @@ const AuthForm = ({
                 errorMessage={emailError}
                 showError={!!emailError}
                 onErrorChange={setEmailError}
-                disabled={isAuthFieldsDisabled}
+                disabled={isEmailSent || isEmailVerified}
               />
               <Button
                 label={
                   resendTimer.isActive
-                    ? `${resendTimer.timeLeft}초 후 재전송`
+                    ? `00:${resendTimer.timeLeft}`
                     : '인증번호 전송'
                 }
                 type='button'
@@ -133,8 +135,8 @@ const AuthForm = ({
                 disabled={
                   !!emailError ||
                   !email ||
-                  isAuthFieldsDisabled ||
-                  resendTimer.isActive
+                  resendTimer.isActive ||
+                  isAuthComplete
                 }
               />
             </div>
@@ -159,7 +161,7 @@ const AuthForm = ({
                     ? formatTime(verificationTimer.timeLeft)
                     : null
                 }
-                disabled={isAuthFieldsDisabled}
+                disabled={isAuthComplete}
               />
               <Button
                 label='인증 확인'
@@ -167,7 +169,7 @@ const AuthForm = ({
                 size='s'
                 baseButton
                 onClick={handleConfirmVerification}
-                disabled={!verificationCode || isAuthFieldsDisabled}
+                disabled={!verificationCode || isAuthComplete}
               />
             </div>
           </>
