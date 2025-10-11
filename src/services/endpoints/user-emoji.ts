@@ -103,6 +103,7 @@ export type UserEmojiCreateRequest = {
 export type CommentResponse = {
   commentId?: number
   content?: string
+  userId?: number
   authorNickname?: string
   createdAt?: string
 }
