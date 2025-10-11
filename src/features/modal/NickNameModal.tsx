@@ -119,7 +119,9 @@ const NicknameForm = ({ onClose }: NicknameModalProps) => {
         await handleSubmit()
       }}
     >
-      <p className='text-lg font-medium mb-4'>닉네임을 입력해주세요</p>
+      <p className='md:text-lg  text-base font-medium mb-4'>
+        닉네임을 입력해주세요
+      </p>
 
       {/* 닉네임 입력 필드 */}
       <div className='relative'>

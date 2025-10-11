@@ -14,13 +14,13 @@ const Modal = ({
   size = 'md',
 }: ModalProps) => {
   const sizeClass =
-    size === 'sm' ? 'w-[280px]' : size === 'md' ? 'w-[580px]' : ''
+    size === 'sm' ? 'md:w-[280px]' : size === 'md' ? 'md:w-[580px]' : ''
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className='fixed inset-0 z-50 flex items-center justify-center'
+          className='fixed inset-0 z-50 flex items-center justify-center px-4'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -36,7 +36,7 @@ const Modal = ({
 
           {/* 모달 컨텐츠 */}
           <motion.div
-            className={`bg-white p-16 rounded-xl z-10 ${sizeClass} ${className}`}
+            className={`bg-white z-10 p-6 md:p-16 rounded-lg md:rounded-xl w-full max-w-full ${sizeClass} ${className}`}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
