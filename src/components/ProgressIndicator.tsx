@@ -6,7 +6,7 @@ type ProgressIndicatorProps = {
   size?: 's' | 'm' | 'l' // 아이콘 크기 (기본값: 'm')
   isLoading?: boolean // 처리 중 여부, true일 때 활성화 (기본값: false)
   text?: string // 아이콘 하단에 표시될 텍스트 (기본값: "")
-  backgroundColor?: 'gray' | 'white' // 배경색 (기본값: 'gray')
+  backgroundColor?: 'orange' | 'gray' | 'white' // 배경색 (기본값: 'orange')
 }
 
 const ProgressIndicator = ({
@@ -14,7 +14,7 @@ const ProgressIndicator = ({
   size = 'm',
   isLoading = false,
   text = '',
-  backgroundColor = 'gray',
+  backgroundColor = 'orange', // 기본값은 'orange'
 }: ProgressIndicatorProps) => {
   // isLoading이 false이면 아무것도 렌더링하지 않습니다.
   if (!isLoading) {
@@ -35,12 +35,19 @@ const ProgressIndicator = ({
     l: 'h-20 w-20',
   }
 
-  // backgroundColor prop에 따른 배경 및 아이콘/텍스트 색상 스타일
+  // 'orange'와 'gray'일 때 모두 회색 배경을 사용합니다.
   const backgroundClasses =
-    backgroundColor === 'white' ? 'bg-white/50' : 'bg-gray_two/80'
+    backgroundColor === 'white' || backgroundColor === 'orange'
+      ? 'bg-white/50'
+      : 'bg-gray_two/80'
 
+  // 'orange'일 때 아이콘과 텍스트 색상을 주황색으로 변경합니다.
   const iconAndTextColor =
-    backgroundColor === 'white' ? 'text-black' : 'text-white'
+    backgroundColor === 'white'
+      ? 'text-black'
+      : backgroundColor === 'orange'
+        ? 'text-orange_three' // 주황색 아이콘/텍스트
+        : 'text-white'       // 회색 배경일 때 흰색 아이콘/텍스트
 
   return (
     // 전체 화면을 덮는 오버레이 컨테이너

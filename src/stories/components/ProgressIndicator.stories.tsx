@@ -30,7 +30,7 @@ export default {
     },
     backgroundColor: {
       control: 'radio',
-      options: ['gray', 'white'],
+      options: ['orange', 'gray', 'white'],
       description: '배경 오버레이의 색상을 지정합니다.',
     },
   },
@@ -62,7 +62,7 @@ Default.args = {
   position: 'center',
   size: 'm',
   text: '로딩 중...',
-  backgroundColor: 'gray',
+  backgroundColor: 'orange',
 }
 
 
@@ -113,6 +113,6 @@ WithButtonAndTimeout.args = {
   position: 'center',
   size: 'm',
   text: '데이터를 처리하고 있습니다...',
-  backgroundColor: 'gray',
+  backgroundColor: 'orange',
 }
 
