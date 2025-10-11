@@ -4,6 +4,7 @@ import { useTimer } from '@/hooks/useTimer'
 import { useState } from 'react'
 import { formatTime } from '@/utils/time'
 import type { useAuthForm } from '@/hooks/useAuthForm'
+import useMobile from '@/hooks/useMobile'
 
 type AuthFormProps = ReturnType<typeof useAuthForm> & {
   submitButtonLabel: string
@@ -31,6 +32,7 @@ const AuthForm = ({
 }: AuthFormProps) => {
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const isMobile = useMobile() // 모바일 구분
 
   // 타이머 훅
   const verificationTimer = useTimer(300)
@@ -88,8 +90,18 @@ const AuthForm = ({
   // 비밀번호 찾기 모드에서 인증 완료 시 이메일/인증 필드는 비활성화
   const isAuthFieldsDisabled = isEmailVerified && mode === 'passwordReset'
 
+  // 모바일 상단 헤더
+  const MobileHeader = (
+    <div className='w-full pt-8 pb-6'>
+      <h1 className='text-4xl font-extrabold text-orange_five'>MOZI</h1>
+      <p className='text-base font-medium mt-2'>
+        {mode === 'register' ? '회원가입' : '비밀번호 찾기'}
+      </p>
+    </div>
+  )
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col'>
+    <form onSubmit={handleSubmit} className='flex flex-col px-12'>
+      {isMobile && MobileHeader}
       <div className='space-y-7'>
         {showAuthFields && (
           <>
@@ -115,7 +127,7 @@ const AuthForm = ({
                     : '인증번호 전송'
                 }
                 type='button'
-                size='m'
+                size='s'
                 baseButton
                 onClick={handleSendVerificationWithTimer}
                 disabled={
@@ -133,7 +145,7 @@ const AuthForm = ({
                 label='이메일 인증 번호'
                 name='emailConfirm'
                 type='text'
-                placeholder='이메일 인증 번호'
+                placeholder='인증 번호'
                 onChange={(v) => setVerificationCode(v)}
                 containerClassName='flex-1'
                 errorMessage={
@@ -152,7 +164,7 @@ const AuthForm = ({
               <Button
                 label='인증 확인'
                 type='button'
-                size='m'
+                size='s'
                 baseButton
                 onClick={handleConfirmVerification}
                 disabled={!verificationCode || isAuthFieldsDisabled}
