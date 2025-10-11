@@ -37,9 +37,19 @@ const injectedRtkApi = api.injectEndpoints({
       ResetPasswordApiArg
     >({
       query: (queryArg) => ({
-        url: `/api/users/password-reset/confirm`,
+        url: `/api/users/password-reset/reset`,
         method: 'POST',
         body: queryArg.passwordResetRequest,
+      }),
+    }),
+    verifyPasswordResetEmail: build.mutation<
+      VerifyPasswordResetEmailApiResponse,
+      VerifyPasswordResetEmailApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/users/password-reset/confirm-email`,
+        method: 'POST',
+        body: queryArg.emailVerificationConfirmRequest,
       }),
     }),
     updateUserNickname: build.mutation<
@@ -126,6 +136,11 @@ export type ResetPasswordApiResponse = /** status 200 OK */ ApiResponseVoid
 export type ResetPasswordApiArg = {
   passwordResetRequest: PasswordResetRequest
 }
+export type VerifyPasswordResetEmailApiResponse =
+  /** status 200 OK */ ApiResponseVoid
+export type VerifyPasswordResetEmailApiArg = {
+  emailVerificationConfirmRequest: EmailVerificationConfirmRequest
+}
 export type UpdateUserNicknameApiResponse =
   /** status 200 OK */ ApiResponseUserResponse
 export type UpdateUserNicknameApiArg = {
@@ -210,10 +225,14 @@ export type EmailVerificationRequest = {
 export type PasswordResetRequest = {
   /** 인증 완료된 이메일 */
   email: string
-  /** 이메일로 발송된 인증 코드 */
-  verificationCode: string
   /** 새로운 비밀번호 */
   newPassword: string
+}
+export type EmailVerificationConfirmRequest = {
+  /** 인증을 진행한 이메일 */
+  email: string
+  /** 이메일로 발송된 인증 코드 */
+  verificationCode: string
 }
 export type UserResponse = {
   /** 회원 번호 */
@@ -236,12 +255,6 @@ export type LoginRequest = {
   /** 비밀번호 */
   password: string
 }
-export type EmailVerificationConfirmRequest = {
-  /** 인증을 진행한 이메일 */
-  email: string
-  /** 이메일로 발송된 인증 코드 */
-  verificationCode: string
-}
 export type NicknameExistsResponse = {
   exists?: boolean
 }
@@ -260,6 +273,7 @@ export const {
   useRegisterMutation,
   useSendPasswordResetEmailMutation,
   useResetPasswordMutation,
+  useVerifyPasswordResetEmailMutation,
   useUpdateUserNicknameMutation,
   useLogoutMutation,
   useLoginMutation,
