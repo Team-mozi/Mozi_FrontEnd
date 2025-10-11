@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWithdrawMutation } from '@/services/endpoints/user'
 import { useDispatch } from 'react-redux'
@@ -6,6 +6,7 @@ import { logout } from '@/store/slices/authSlice'
 import Button from '@/components/Button'
 import Modal from '@/components/Modal'
 import Input from '@/components/Input'
+import { ToastContext } from '@/components/ToastProvider'
 
 interface WithdrawalModalProps {
   isOpen: boolean
@@ -17,20 +18,29 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
   const [withdraw, { isLoading }] = useWithdrawMutation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [error, setError] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState<string>('')
+  const toast = useContext(ToastContext)
 
   const handleWithdrawal = async () => {
     try {
-      setError(null)
       await withdraw({ userWithdrawalRequest: { password } }).unwrap()
       dispatch(logout())
       onClose()
-      alert('회원탈퇴가 완료되었습니다.') // 추후 토스트 메시지로 개발할 예정
+      toast?.showToast({
+        message: '회원탈퇴가 완료되었습니다.',
+        messageType: 'success',
+        duration: 2500,
+        position: 'top-center',
+      })
       navigate('/login')
     } catch (err: any) {
       console.error('회원탈퇴 실패:', err)
-      setError(err?.data?.message || '비밀번호를 다시 입력해주세요.')
+      toast?.showToast({
+        message: err?.data?.message || '비밀번호를 다시 입력해주세요.',
+        messageType: 'error',
+        duration: 2500,
+        position: 'top-center',
+      })
     }
   }
 
@@ -41,9 +51,9 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
     <Modal isOpen={isOpen} size='md'>
       <div className='px-4 flex flex-col items-center text-center'>
         <h2 className='text-xl font-semibold mb-4'>회원탈퇴</h2>
-        <p className='text-lg mb-4'>
+        <p className='text-base md:text-lg mb-4'>
           정말 탈퇴하시겠습니까? <br />
-          계정은 삭제되며 복구되지 않습니다.
+          삭제된 계정은 복구되지 않습니다.
         </p>
         <div className='w-full'>
           <Input
@@ -55,8 +65,6 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
             onErrorChange={setPasswordError}
           ></Input>
         </div>
-        {/* 토스트메시지로 개발할 예정 */}
-        {error && <p className='text-red_one text-sm'>{error}</p>}
 
         <div className='flex justify-center gap-6 mt-8 w-full'>
           <Button
