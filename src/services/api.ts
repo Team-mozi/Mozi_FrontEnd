@@ -12,7 +12,7 @@ import type { RootState } from '@/store/store'
 // fetchBaseQuery 타입 지정
 const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
   fetchBaseQuery({
-    baseUrl: '/',
+    baseUrl: import.meta.env.VITE_API_BASE_URL,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.accessToken
       if (token) headers.set('Authorization', `Bearer ${token}`)
