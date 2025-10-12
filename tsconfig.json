@@ -53,5 +53,11 @@
   "include": ["src/**/*"], // 또는, "include": ["src/**/*.ts", "src/**/*.tsx"]
   // 컴파일할 파일이나, 디렉토리 지정
 
-  "exclude": ["node_modules", "dist"] // 컴파일에서 제외할 파일/디렉토리 지정,
+  "exclude": [
+    "node_modules",
+    "dist", // 빌드 결과물이 저장되는 폴더가 있다면 추가
+    "**/*.d.ts", // 모든 타입 정의(*.d.ts) 파일 제외 (가장 중요)
+    "**/*.stories.tsx", // Storybook 파일 제외 (로그에 포함되어 있음)
+    "**/*.stories.ts"
+  ]
 }
