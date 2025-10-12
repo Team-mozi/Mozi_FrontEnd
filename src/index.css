@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Wanted Sans Std Variable', 'Wanted Sans Std';
+  font-family: 'Wanted Sans Std Variable', 'Wanted Sans Std', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 }
