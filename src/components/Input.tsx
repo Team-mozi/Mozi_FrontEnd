@@ -21,6 +21,7 @@ type InputProps = {
   onErrorChange?: (error: string) => void
   timer?: React.ReactNode // 타이머
   disabled?: boolean // 비활성화
+  autoComplete?: string
 }
 
 const Input = ({
@@ -44,6 +45,7 @@ const Input = ({
   onErrorChange,
   timer,
   disabled = false,
+  autoComplete,
 }: InputProps) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
@@ -109,6 +111,7 @@ const Input = ({
           minLength={minLength}
           maxLength={maxLength}
           disabled={disabled}
+          autoComplete={autoComplete}
           className={`h-12 border rounded-xl px-4 transition-colors duration-300 focus:outline-none focus:ring-1 hover:border-orange_three font-normal text-sm sm:text-base 
             ${hasShadow ? 'shadow-md' : ''}
             ${inputPaddingRightClass}

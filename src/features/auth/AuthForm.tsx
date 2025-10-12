@@ -148,6 +148,7 @@ const AuthForm = ({
                 placeholder='인증 번호'
                 onChange={(v) => setVerificationCode(v)}
                 containerClassName='flex-1'
+                autoComplete='one-time-code'
                 showError={false}
                 timer={
                   verificationTimer.isActive
@@ -180,6 +181,7 @@ const AuthForm = ({
               errorMessage={passwordError}
               showError={!!passwordError}
               onErrorChange={setPasswordError}
+              autoComplete='new-password'
             />
 
             {/* 비밀번호 재확인 */}
@@ -193,6 +195,7 @@ const AuthForm = ({
               onChange={handleConfirmPasswordChange}
               errorMessage={passwordMatchError}
               showError={!!passwordMatchError}
+              autoComplete='new-password'
             />
           </>
         )}

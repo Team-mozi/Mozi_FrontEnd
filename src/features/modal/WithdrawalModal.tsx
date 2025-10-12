@@ -49,7 +49,16 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
 
   return (
     <Modal isOpen={isOpen} size='md'>
-      <div className='px-4 flex flex-col items-center text-center'>
+      <form className='px-4 flex flex-col items-center text-center'>
+        {/* 숨겨진 username 필드 (브라우저 검사용) */}
+        <input
+          type='text'
+          name='username'
+          autoComplete='username'
+          value='hidden-user'
+          style={{ display: 'none' }}
+          readOnly
+        />
         <h2 className='text-xl font-semibold mb-4'>회원탈퇴</h2>
         <p className='text-base md:text-lg mb-4'>
           정말 탈퇴하시겠습니까? <br />
@@ -61,6 +70,7 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
             name='password'
             type='password'
             placeholder='비밀번호를 입력하세요'
+            autoComplete='new-password'
             onChange={(e) => setPassword(e)}
             onErrorChange={setPasswordError}
           ></Input>
@@ -76,7 +86,7 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
           />
           <Button label='취소' onClick={onClose} />
         </div>
-      </div>
+      </form>
     </Modal>
   )
 }

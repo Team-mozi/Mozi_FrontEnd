@@ -38,6 +38,7 @@ const LoginForm = () => {
           required
           onChange={(value) => setEmail(value)}
           onErrorChange={setEmailError}
+          autoComplete='username'
         />
         <Input
           label='비밀번호'
@@ -47,6 +48,7 @@ const LoginForm = () => {
           required
           onChange={(value) => setPassword(value)}
           onErrorChange={setPasswordError}
+          autoComplete='current-password'
         />
         {error && <p className='text-red-500 text-sm'>{error}</p>}
       </div>
