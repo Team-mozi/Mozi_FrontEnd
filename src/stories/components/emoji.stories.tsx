@@ -11,7 +11,7 @@ export default {
   argTypes: {
     size: {
       control: 'radio',
-      options: ['ss', 's', 'ms', 'm', 'l'],
+      options: ['xs', 's', 'm', 'l', 'xl'],
       description: '이모지의 크기를 선택합니다.',
     },
     number: {
@@ -42,7 +42,7 @@ const Template: StoryFn<typeof Emoji> = (args) => <Emoji {...args} />
  */
 export const Default = Template.bind({})
 Default.args = {
-  size: 'm',
+  size: 'l',
   number: 1,
 }
 

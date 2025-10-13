@@ -3,17 +3,17 @@ import { useEffect, useState } from 'react'
 /**
  * 이모지 컴포넌트의 사이즈를 정의합니다.
  *
- * ss: 24x24px
+ * xs: 24x24px
  * 
  * s: 36x36px
  *
- * ms: 64x64px
+ * m: 64x64px
  * 
- * m: 96x96px (기본값)
+ * l: 96x96px (기본값)
  *
- * l: 216x216px
+ * xl: 216x216px
  */
-export type EmojiSize = 'ss' | 's' | 'ms' | 'm' | 'l'
+export type EmojiSize = 'xs' | 's' | 'm' | 'l' | 'xl'
 
 /**
  * Emoji 컴포넌트가 받을 수 있는 props의 타입을 정의합니다.
@@ -31,7 +31,7 @@ export type EmojiProps = {
  * 'number' 또는 'url' prop 중 하나를 통해 이미지 소스를 제공해야 합니다.
  */
 const Emoji = ({
-  size = 'm',
+  size = 'l',
   onClick,
   className,
   number,
@@ -62,11 +62,11 @@ const Emoji = ({
 
   // 사이즈별 크기 스타일
   const sizeClasses: { [key in EmojiSize]: string } = {
-    ss: 'w-6 h-6', // 24px
+    xs: 'w-6 h-6', // 24px
     s: 'w-9 h-9', // 36px
-    ms: 'w-16 h-16', // 64px
-    m: 'w-24 h-24', // 96px
-    l: 'w-36 h-36', // 216px
+    m: 'w-16 h-16', // 64px
+    l: 'w-24 h-24', // 96px
+    xl: 'w-36 h-36', // 216px
   }
 
   // 클릭 이벤트가 있을 경우 상호작용 스타일 추가
