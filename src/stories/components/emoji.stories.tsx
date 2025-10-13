@@ -15,7 +15,7 @@ export default {
       description: '이모지의 크기를 선택합니다.',
     },
     number: {
-      control: { type: 'number', min: 1, max: 40, step: 1 },
+      control: { type: 'number', min: 1, max: 10, step: 1 },
       description: '`/src/assets/emoji-icons/` 폴더에 있는 이모지 번호를 지정합니다.',
     },
     url: {
@@ -63,7 +63,7 @@ Small.args = {
 export const Large = Template.bind({})
 Large.args = {
   size: 'l',
-  number: 10,
+  number: 7,
 }
 
 /**
@@ -74,7 +74,7 @@ Large.args = {
 export const Clickable = Template.bind({})
 Clickable.args = {
   size: 'm',
-  number: 15,
+  number: 10,
   // onClick prop이 argTypes에 정의되어 있으므로, Controls에서 이벤트를 트리거할 수 있습니다.
 }
 
@@ -95,6 +95,6 @@ FromURL.args = {
 export const CustomStyled = Template.bind({})
 CustomStyled.args = {
   size: 'm',
-  number: 20,
+  number: 2,
   className: 'rounded-full bg-sky-200 p-4 shadow-xl',
 }
