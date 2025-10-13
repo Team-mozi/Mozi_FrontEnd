@@ -11,7 +11,7 @@ export default {
   argTypes: {
     size: {
       control: 'radio',
-      options: ['s', 'm', 'l'],
+      options: ['xs', 's', 'm', 'l', 'xl'],
       description: '로고의 크기를 선택합니다.',
     },
     onClick: {
