@@ -9,11 +9,13 @@ import { useEffect, useState } from 'react'
  *
  * m: 64x64px
  * 
+ * ml: 80x80px
+ * 
  * l: 96x96px (기본값)
  *
  * xl: 216x216px
  */
-export type EmojiSize = 'xs' | 's' | 'm' | 'l' | 'xl'
+export type EmojiSize = 'xs' | 's' | 'm' | 'ml' | 'l' | 'xl'
 
 /**
  * Emoji 컴포넌트가 받을 수 있는 props의 타입을 정의합니다.
@@ -65,6 +67,7 @@ const Emoji = ({
     xs: 'w-6 h-6', // 24px
     s: 'w-9 h-9', // 36px
     m: 'w-16 h-16', // 64px
+    ml: 'w-20 h-20', // 80px
     l: 'w-24 h-24', // 96px
     xl: 'w-36 h-36', // 216px
   }

@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react'
+import { BrowserRouter } from 'react-router-dom'
 
 import Logo from '@/components/Logo.tsx'
 
@@ -11,14 +12,21 @@ export default {
   argTypes: {
     size: {
       control: 'radio',
-      options: ['xs', 's', 'm', 'l', 'xl'],
+      options: ['xs', 's', 'm', 'l'],
       description: '로고의 크기를 선택합니다.',
     },
-    onClick: {
-      action: 'clicked',
-      description: '로고 클릭 시 실행되는 이벤트입니다.',
+    navigateOnClick: {
+      control: 'boolean',
+      description: '클릭 시 홈으로 이동할지 여부입니다.',
     },
   },
+  decorators: [
+    (Story) => (
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
+    ),
+  ],
 } as Meta
 
 const Template: StoryFn<typeof Logo> = (args) => <Logo {...args} />
@@ -48,10 +56,34 @@ Large.args = {
 }
 
 /**
- * 클릭 이벤트가 있는 로고입니다. 클릭 시 Storybook의 Actions 탭에 기록됩니다.
+ * 클릭 가능한 로고입니다. 클릭 시 홈으로 이동합니다.
  */
 export const Clickable = Template.bind({})
 Clickable.args = {
   size: 'm',
-  // onClick prop을 전달하면 action('clicked')가 자동으로 이벤트를 잡아줍니다.
+  navigateOnClick: true,
 }
+
+/**
+ * 모든 크기의 로고를 비교할 수 있는 스토리입니다.
+ */
+export const AllSizes = () => (
+  <div className="flex flex-col items-center gap-8">
+    <div className="flex items-center gap-4">
+      <Logo size="xs" />
+      <span className="text-sm text-gray-600">xs</span>
+    </div>
+    <div className="flex items-center gap-4">
+      <Logo size="s" />
+      <span className="text-sm text-gray-600">s</span>
+    </div>
+    <div className="flex items-center gap-4">
+      <Logo size="m" />
+      <span className="text-sm text-gray-600">m</span>
+    </div>
+    <div className="flex items-center gap-4">
+      <Logo size="l" />
+      <span className="text-sm text-gray-600">l</span>
+    </div>
+  </div>
+)

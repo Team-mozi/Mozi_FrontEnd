@@ -25,6 +25,9 @@ module.exports = {
       borderWidth: {
         '3': '3px',
       },
+      backgroundImage: {
+        'home-background': "url('@/assets/home.png')",
+      },
     },
   },
   plugins: [],
