@@ -25,11 +25,12 @@ export type BottomSheetProps = {
 /**
  * 기본 바텀시트 컴포넌트
  * - 하단 슬라이드 인 애니메이션
- * - Header, Content 슬롯 제공
+ * - Header, Content, Footer 슬롯 제공
  */
 const BottomSheet: React.FC<BottomSheetProps> & {
   Header: typeof BottomSheetHeader
   Content: typeof BottomSheetContent
+  Footer: typeof BottomSheetFooter
 } = ({
   children,
   className,
@@ -94,12 +95,8 @@ const BottomSheet: React.FC<BottomSheetProps> & {
   const endDrag = () => {
     if (!isDragging) return
     setIsDragging(false)
-
-    if (translateY > 120) {
-      onClose()
-    } else {
-      setTranslateY(0)
-    }
+    if (translateY > 120) onClose()
+    else setTranslateY(0)
   }
 
   return (
@@ -158,9 +155,11 @@ const BottomSheet: React.FC<BottomSheetProps> & {
             onMouseDown={(e) => startDrag(e.clientY)}
             onTouchStart={(e) => startDrag(e.touches[0].clientY)}
           >
-            <div className='w-28 h-1.5 bg-gray-300 rounded-full' />
+            <div className='w-20 h-1.5 bg-gray-300 rounded-full' />
           </div>
-          <div className='flex-1 overflow-y-auto'>{children}</div>
+
+          {/* 실제 콘텐츠 영역 */}
+          <div className='flex-1 flex flex-col h-full'>{children}</div>
         </aside>
       </div>
     </BottomSheetContext.Provider>
@@ -172,21 +171,25 @@ const BottomSheet: React.FC<BottomSheetProps> & {
  */
 const BottomSheetHeader: React.FC<{ children: React.ReactNode }> = ({
   children,
-}) => {
-  return <div className='flex-shrink-0 px-6 pt-6'>{children}</div>
-}
+}) => <div className='flex-shrink-0 px-6'>{children}</div>
 
 /**
  * 바텀시트 콘텐츠 컴포넌트
  */
 const BottomSheetContent: React.FC<{ children: React.ReactNode }> = ({
   children,
-}) => {
-  return <div className='flex-1 overflow-y-auto px-6'>{children}</div>
-}
+}) => <div className='flex-1 overflow-y-auto px-6'>{children}</div>
 
-// 복합 컴포넌트 패턴 설정 (Header, Content만)
+/**
+ * 바텀시트 푸터 컴포넌트
+ */
+const BottomSheetFooter: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <div className='flex-shrink-0 px-6 pb-6 pt-3'>{children}</div>
+
+// 복합 컴포넌트 패턴 설정
 BottomSheet.Header = BottomSheetHeader
 BottomSheet.Content = BottomSheetContent
+BottomSheet.Footer = BottomSheetFooter
 
 export default BottomSheet
