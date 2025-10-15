@@ -4,7 +4,11 @@ const emojiModules = import.meta.glob('/src/assets/emoji-icons/*.svg', {
   eager: true,
   as: 'url',
 })
-const emojis = Object.values(emojiModules)
+// 999.svg는 제외
+const emojis = Object.entries(emojiModules)
+  .filter(([path]) => !path.endsWith('999.svg'))
+  .map(([, url]) => url)
+ // const emojis = Object.values(emojiModules)
 
 // EmojiGrid 컴포넌트의 props 타입을 정의
 interface EmojiGridProps {

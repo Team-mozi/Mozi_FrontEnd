@@ -9,11 +9,13 @@ import Modal from '@/components/Modal'
 import NicknameForm from '@/features/modal/NickNameModal'
 import ProgressIndicator from '@/components/ProgressIndicator'
 import useHighlights from '@/hooks/useHighlights'
+import PostSheet from '@/features/postSheet/PostSheet'
 
 const Home = () => {
   const { isLoggedIn, nickname } = useSelector((state: RootState) => state.auth)
   const navigate = useNavigate()
   const [isModalOpen, setModalOpen] = useState(false)
+  const [isPostSheetOpen, setPostSheetOpen] = useState(false)
   const { randomEmojis, latestMyEmoji, emojiPositions, isLoading } = useHighlights()
 
   // 로그인 상태 + 닉네임 null => 닉네임 모달 열기
@@ -25,6 +27,16 @@ const Home = () => {
 
   const handleLoginClick = () => {
     navigate('/login')
+  }
+
+  const handleMyEmojiClick = () => {
+    if (isLoggedIn) {
+      // latestMyEmoji?.emojiId가 존재하지 않을 때만 PostSheet 열기
+      if (!latestMyEmoji?.emojiId) {
+        setPostSheetOpen(true)
+      }
+      // emojiId가 존재한다면 본인 이모지 게시글 열기
+    }
   }
 
   return (
@@ -58,7 +70,14 @@ const Home = () => {
     <Emoji 
       size="xl" 
       number={latestMyEmoji?.emojiId || 999} 
-      onClick={isLoggedIn ? () => {} : handleLoginClick} 
+      onClick={isLoggedIn ? handleMyEmojiClick : handleLoginClick} 
+    />
+    
+    {/* PostSheet */}
+    <PostSheet 
+      isOpen={isPostSheetOpen}
+      onClose={() => setPostSheetOpen(false)}
+      showButton={false}
     />
     
     {/* 랜덤 이모지들을 원형으로 배치 */}
