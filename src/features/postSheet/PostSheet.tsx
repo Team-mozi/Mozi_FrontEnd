@@ -8,9 +8,10 @@ interface PostSheetProps {
   isOpen?: boolean
   onClose?: () => void
   showButton?: boolean
+  onEmojiCreated?: () => void
 }
 
-export default function PostSheet({ isOpen: externalIsOpen, onClose, showButton = true }: PostSheetProps) {
+export default function PostSheet({ isOpen: externalIsOpen, onClose, showButton = true, onEmojiCreated }: PostSheetProps) {
   // Sheet 열림/닫힘 상태
   const [internalIsOpen, setInternalIsOpen] = useState(false)
   const isMobile = useMobile()
@@ -21,8 +22,8 @@ export default function PostSheet({ isOpen: externalIsOpen, onClose, showButton 
 
   // PostForm을 useMemo로 메모이제이션하여 불필요한 리렌더 방지
   const formElement = useMemo(
-    () => <PostForm isMobile={isMobile} setIsOpen={setIsOpen} />,
-    [isMobile],
+    () => <PostForm isMobile={isMobile} setIsOpen={setIsOpen} onEmojiCreated={onEmojiCreated} />,
+    [isMobile, onEmojiCreated],
   )
 
   return (

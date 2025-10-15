@@ -21,7 +21,7 @@ const Home = () => {
   const [isPostSheetOpen, setPostSheetOpen] = useState(false)
   const [isSideSheetOpen, setSideSheetOpen] = useState(false)
   const [selectedEmojiDetail, setSelectedEmojiDetail] = useState<UserEmojiDetailResponse | null>(null)
-  const { randomEmojis, latestMyEmoji, emojiPositions, isLoading } = useHighlights()
+  const { randomEmojis, latestMyEmoji, emojiPositions, isLoading, updateLatestEmoji } = useHighlights()
   
   // 이모지 상세 정보 조회 API
   const [getUserEmojiDetail, { isLoading: isDetailLoading }] = useLazyGetUserEmojiDetailQuery()
@@ -112,6 +112,7 @@ const Home = () => {
       isOpen={isPostSheetOpen}
       onClose={() => setPostSheetOpen(false)}
       showButton={false}
+      onEmojiCreated={updateLatestEmoji}
     />
     
     {/* PostSideSheet (게시글) */}

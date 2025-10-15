@@ -50,6 +50,18 @@ const useHighlights = () => {
     }
   }, [isLoggedIn])
 
+  // 최신 이모지 업데이트 함수
+  const updateLatestEmoji = useCallback(async () => {
+    if (isLoggedIn) {
+      try {
+        // highlights 데이터를 다시 가져와서 최신 이모지 업데이트
+        await refetch()
+      } catch (error) {
+        console.error('최신 이모지 업데이트 실패:', error)
+      }
+    }
+  }, [isLoggedIn, refetch])
+
   // 로그인 상태에 따른 데이터 결정
   const randomEmojis = isLoggedIn ? (highlightsData?.data?.randomEmojis || []) : guestRandomEmojis
   const representativeEmojis = highlightsData?.data?.representativeEmojis || []
@@ -169,7 +181,8 @@ const useHighlights = () => {
     emojiPositions,
     isLoading,
     error,
-    refetch
+    refetch,
+    updateLatestEmoji
   }
 }
 
