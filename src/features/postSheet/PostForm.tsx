@@ -80,7 +80,7 @@ const PostForm = ({ isMobile, setIsOpen }: PostFormProps) => {
     const formData = new FormData()
     formData.append(
       'request',
-      new Blob([JSON.stringify({ emojiId: selectedEmoji + 1, text })], {
+      new Blob([JSON.stringify({ emojiId: selectedEmoji, text })], {
         type: 'application/json',
       }),
     )
