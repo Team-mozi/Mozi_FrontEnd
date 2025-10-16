@@ -16,6 +16,7 @@ import { ToastContext } from '@/components/ToastProvider'
 interface PostFormProps {
   isMobile: boolean // 모바일 화면 여부
   setIsOpen: Dispatch<SetStateAction<boolean>> // Sheet 열고 닫기 상태
+  onEmojiCreated?: () => void // 이모지 생성 완료 시 호출할 함수
 }
 
 interface TextAreaInputProps {
@@ -47,7 +48,7 @@ const TextAreaInput = ({ text, setText, isMobile }: TextAreaInputProps) => {
     </div>
   )
 }
-const PostForm = ({ isMobile, setIsOpen }: PostFormProps) => {
+const PostForm = ({ isMobile, setIsOpen, onEmojiCreated }: PostFormProps) => {
   const [selectedEmoji, setSelectedEmoji] = useState<number | null>(null) // 선택된 이모지
   const [text, setText] = useState('') // 입력 텍스트
   const [images, setImages] = useState<File[]>([]) // 업로드된 이미지 목록
@@ -80,7 +81,7 @@ const PostForm = ({ isMobile, setIsOpen }: PostFormProps) => {
     const formData = new FormData()
     formData.append(
       'request',
-      new Blob([JSON.stringify({ emojiId: selectedEmoji + 1, text })], {
+      new Blob([JSON.stringify({ emojiId: selectedEmoji, text })], {
         type: 'application/json',
       }),
     )
@@ -96,6 +97,8 @@ const PostForm = ({ isMobile, setIsOpen }: PostFormProps) => {
       })
       setIsOpen(false)
       resetForm()
+      // 이모지 생성 완료 시 최신 이모지 업데이트
+      onEmojiCreated?.()
     } catch (error) {
       console.error(error)
       showToast?.({
