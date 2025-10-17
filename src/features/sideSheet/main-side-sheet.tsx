@@ -2,6 +2,9 @@ import { useState } from 'react'
 
 import SideSheet from '@/components/SideSheet'
 import ToggleButton from '@/components/ToggleButton'
+import { useGetCommentsQuery, useCreateCommentMutation } from '@/services/endpoints/user-emoji'
+import { useSelector } from 'react-redux'
+import type { RootState } from '@/store/store'
 import type { UserEmojiDetailResponse } from '@/services/endpoints/user-emoji'
 
 import ChatArea from './chat-area'
@@ -28,14 +31,36 @@ const PostSideSheet: React.FC<PostSideSheetProps> = ({
   userName,
   emojiDetail,
 }) => {
-  const [chatMessages, setChatMessages] = useState<string[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isChatExpanded, setIsChatExpanded] = useState(false)
+  
+  // Redux에서 현재 사용자 정보 가져오기
+  const { userId, nickname } = useSelector((state: RootState) => state.auth)
+  
+  // 댓글 조회 API
+  const { data: commentsData, isLoading: isCommentsLoading, refetch } = useGetCommentsQuery(
+    { userEmojiId: emojiDetail?.userEmojiId || 0 },
+    { skip: !emojiDetail?.userEmojiId || !isOpen }
+  )
+  
+  // 댓글 작성 API
+  const [createComment] = useCreateCommentMutation()
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim()) return
-    setChatMessages((prev) => [...prev, inputValue])
-    setInputValue('')
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || !emojiDetail?.userEmojiId) return
+    
+    try {
+      await createComment({
+        userEmojiId: emojiDetail.userEmojiId,
+        commentCreateRequest: { content: inputValue.trim() }
+      }).unwrap()
+      
+      setInputValue('')
+      // 댓글 목록 새로고침
+      refetch()
+    } catch (error) {
+      console.error('댓글 작성 실패:', error)
+    }
   }
 
   return (
@@ -67,7 +92,13 @@ const PostSideSheet: React.FC<PostSideSheetProps> = ({
             expandedText='채팅창 축소하기'
             collapsedText='채팅창 확대하기'
           />
-          <ChatArea messages={chatMessages} />
+          <ChatArea 
+            comments={commentsData?.data || []} 
+            currentUserId={userId}
+            currentUserNickname={nickname}
+            isLoading={isCommentsLoading}
+            postAuthorNickname={emojiDetail?.nickname}
+          />
         </div>
       </SideSheet.Content>
 

@@ -5,6 +5,8 @@ interface ChatBubbleProps {
   senderId: string
   currentUserId: string
   timestamp: Date
+  isOwnMessage?: boolean
+  postAuthorNickname?: string
 }
 
 const ChatBubble: React.FC<ChatBubbleProps> = ({
@@ -12,8 +14,11 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
   message,
   senderId,
   timestamp,
+  isOwnMessage = false,
+  postAuthorNickname,
 }) => {
-  const isMyMessage = senderId === currentUserId
+  const isMyMessage = isOwnMessage || senderId === currentUserId
+  const isPostAuthor = postAuthorNickname && senderId === postAuthorNickname
 
   // 1. 말풍선 스타일
   const myBubble = 'bg-orange_five text-black rounded-xl rounded-br-lg'
@@ -37,7 +42,10 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
     <div className='flex flex-col mb-4'>
       {/* 1. 이름 (상대방 메시지에만 표시) */}
       <div className={`text-medium text-sm mb-1 flex ${blockAlignmentClasses}`}>
-        {<span>{senderId}</span>}
+        <span>
+          {senderId}
+          {isPostAuthor && <span className="text-orange_five font-medium"> (작성자)</span>}
+        </span>
       </div>
 
       {/* 2. 말풍선 + 시간*/}
