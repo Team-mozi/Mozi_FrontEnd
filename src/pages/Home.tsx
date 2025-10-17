@@ -13,6 +13,8 @@ import PostSheet from '@/features/postSheet/PostSheet'
 import PostSideSheet from '@/features/sideSheet/main-side-sheet'
 import { useLazyGetUserEmojiDetailQuery } from '@/services/endpoints/user-emoji'
 import type { UserEmojiDetailResponse } from '@/services/endpoints/user-emoji'
+import QuickEmojiBar from '@/components/QuickEmojiBar'
+import MainCommentInput from '@/components/MainCommentInput'
 
 const Home = () => {
   const { isLoggedIn, nickname } = useSelector((state: RootState) => state.auth)
@@ -20,7 +22,11 @@ const Home = () => {
   const [isModalOpen, setModalOpen] = useState(false)
   const [isPostSheetOpen, setPostSheetOpen] = useState(false)
   const [isSideSheetOpen, setSideSheetOpen] = useState(false)
+  const [isMyPageOpen, setIsMyPageOpen] = useState(false) // MyPage 열림 상태
   const [selectedEmojiDetail, setSelectedEmojiDetail] = useState<UserEmojiDetailResponse | null>(null)
+  const [selectedQuickEmoji, setSelectedQuickEmoji] = useState<number | null>(null) // 간편 등록에서 선택된 이모지 상태
+  const [commentInput, setCommentInput] = useState('') // 댓글 입력 상태
+  const [isQuickPostLoading, setIsQuickPostLoading] = useState(false) // 간편 등록 로딩 상태
   const { randomEmojis, latestMyEmoji, emojiPositions, isLoading, updateLatestEmoji } = useHighlights()
   
   // 이모지 상세 정보 조회 API
@@ -73,6 +79,25 @@ const Home = () => {
     }
   }
 
+  // QuickEmojiBar에서 이모지 선택 시 처리
+  const handleQuickEmojiClick = (emojiId: number) => {
+    if (isLoggedIn) {
+      setSelectedQuickEmoji(emojiId)
+      // TODO: 선택된 이모지로 간편 등록 기능 구현 예정
+      console.log('선택된 이모지:', emojiId)
+    }
+  }
+
+  // 댓글 전송 처리 (MainCommentInput에서 실제 등록 처리 후 호출됨)
+  const handleSendComment = () => {
+    // 등록 완료 후 상태 초기화
+    setCommentInput('')
+    setSelectedQuickEmoji(null)
+    setIsQuickPostLoading(false) // 로딩 상태 초기화
+    // 최신 이모지 업데이트
+    updateLatestEmoji()
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-home-background bg-cover bg-center">
     <div className="absolute top-0 left-0 w-full flex items-center justify-between px-8 py-6 z-10">
@@ -98,7 +123,7 @@ const Home = () => {
         )}
       </div>
       {/* 우측 상단: 메뉴 버튼 */}
-      {isLoggedIn && <MyPage />}
+      {isLoggedIn && <MyPage onOpenChange={setIsMyPageOpen} />}
     </div>
     {/* 본인 이모지 */}
     <Emoji 
@@ -148,21 +173,27 @@ const Home = () => {
       )
     })}
     
-    {/* 플러스 아이콘 버튼 - 중앙 하단 (로그인한 사용자만) */}
-    {isLoggedIn && (
-      <button
-        onClick={() => setPostSheetOpen(true)}
-        className='fixed bottom-8 left-1/2 transform -translate-x-1/2 text-orange_five hover:scale-110 transition-transform z-20'
-      >
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          viewBox='0 0 448 512'
-          className='w-6 h-6'
-          fill='currentColor'
-        >
-          <path d='M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z' />
-        </svg>
-      </button>
+    {/* 간편 등록 - MyPage가 열려있지 않을 때만 표시 */}
+    {isLoggedIn && !isMyPageOpen && (
+      <div className="fixed bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center gap-3 w-full max-w-4xl px-4">
+        <QuickEmojiBar
+          onPlusClick={() => setPostSheetOpen(true)}
+          onEmojiClick={handleQuickEmojiClick}
+          isLoggedIn={isLoggedIn}
+          selectedEmojiId={selectedQuickEmoji}
+        />
+        
+        {/* 댓글 입력창 - 이모지 선택 시에만 표시 */}
+        {selectedQuickEmoji && (
+          <MainCommentInput
+            inputValue={commentInput}
+            onInputChange={setCommentInput}
+            onSendMessage={handleSendComment}
+            selectedEmojiId={selectedQuickEmoji}
+            onLoadingChange={setIsQuickPostLoading}
+          />
+        )}
+      </div>
     )}
 
     {/* 닉네임 설정 모달 */}
@@ -172,8 +203,12 @@ const Home = () => {
     
     {/* API 호출 중 로딩 인디케이터 */}
     <ProgressIndicator 
-      isLoading={isLoading || isDetailLoading} 
-      text={isDetailLoading ? "게시글을 불러오는 중..." : "이모지를 불러오는 중..."} 
+      isLoading={isLoading || isDetailLoading || isQuickPostLoading} 
+      text={
+        isQuickPostLoading ? "게시물을 등록하는 중..." :
+        isDetailLoading ? "게시글을 불러오는 중..." : 
+        "이모지를 불러오는 중..."
+      } 
     />
     </div>
   )
