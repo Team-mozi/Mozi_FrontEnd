@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Emoji from './emoji'
+import Emoji from '@/components/emoji'
 
 interface QuickEmojiBarProps {
   onPlusClick: () => void

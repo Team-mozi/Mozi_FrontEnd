@@ -13,8 +13,7 @@ import PostSheet from '@/features/postSheet/PostSheet'
 import PostSideSheet from '@/features/sideSheet/main-side-sheet'
 import { useLazyGetUserEmojiDetailQuery } from '@/services/endpoints/user-emoji'
 import type { UserEmojiDetailResponse } from '@/services/endpoints/user-emoji'
-import QuickEmojiBar from '@/components/QuickEmojiBar'
-import MainCommentInput from '@/components/MainCommentInput'
+import { QuickEmojiBar, MainCommentInput } from '@/features/quickPost'
 
 const Home = () => {
   const { isLoggedIn, nickname } = useSelector((state: RootState) => state.auth)

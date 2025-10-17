@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
-import MainInput from './MainInput'
-import SendButton from './SendButton'
+import MainInput from '@/components/MainInput'
+import SendButton from '@/components/SendButton'
 import SmallImageUploader from './SmallImageUploader'
 import { useCreateUserEmojiMutation } from '@/services/endpoints/user-emoji'
-import { ToastContext } from './ToastProvider'
+import { ToastContext } from '@/components/ToastProvider'
 
 type MainCommentInputProps = {
   inputValue: string
