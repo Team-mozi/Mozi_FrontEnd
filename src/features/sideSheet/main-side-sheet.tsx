@@ -70,6 +70,7 @@ const PostSideSheet: React.FC<PostSideSheetProps> = ({
         <SideSheetHeader
           userName={userName}
           postTime={postTime}
+          createdAt={emojiDetail?.createdAt}
           onClose={onClose}
         />
       </SideSheet.Header>
