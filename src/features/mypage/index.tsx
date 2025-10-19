@@ -9,7 +9,11 @@ import WithdrawalModal from '@/features/modal/WithdrawalModal'
 import useMobile from '@/hooks/useMobile'
 import Logo from '@/components/Logo'
 
-const MyPage = () => {
+interface MyPageProps {
+  onOpenChange?: (isOpen: boolean) => void
+}
+
+const MyPage = ({ onOpenChange }: MyPageProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
   const [isWithdrawalModalOpen, setIsWithdrawalModalOpen] = useState(false)
@@ -68,10 +72,21 @@ const MyPage = () => {
     </>
   )
 
+  // MyPage 열림/닫힘 상태를 부모 컴포넌트에 전달
+  const handleOpen = () => {
+    setIsOpen(true)
+    onOpenChange?.(true)
+  }
+
+  const handleClose = () => {
+    setIsOpen(false)
+    onOpenChange?.(false)
+  }
+
   return (
     <div>
       {/* 마이페이지 버튼 */}
-      <button onClick={() => setIsOpen(true)} className='text-black'>
+      <button onClick={handleOpen} className='text-black'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           viewBox='0 0 448 512'
@@ -84,11 +99,11 @@ const MyPage = () => {
 
       {/* 반응형: 화면 크기에 따라 SideSheet / BottomSheet 전환 */}
       {isMobile ? (
-        <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <BottomSheet isOpen={isOpen} onClose={handleClose}>
           {sheetContent}
         </BottomSheet>
       ) : (
-        <SideSheet isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <SideSheet isOpen={isOpen} onClose={handleClose}>
           {sheetContent}
         </SideSheet>
       )}
