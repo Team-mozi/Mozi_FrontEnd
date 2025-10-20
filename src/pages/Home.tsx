@@ -14,6 +14,7 @@ import PostSideSheet from '@/features/sideSheet/main-side-sheet'
 import { useLazyGetUserEmojiDetailQuery } from '@/services/endpoints/user-emoji'
 import type { UserEmojiDetailResponse } from '@/services/endpoints/user-emoji'
 import { QuickEmojiBar, MainCommentInput } from '@/features/quickPost'
+import useMobile from '@/hooks/useMobile'
 
 const Home = () => {
   const { isLoggedIn, nickname } = useSelector((state: RootState) => state.auth)
@@ -27,6 +28,7 @@ const Home = () => {
   const [commentInput, setCommentInput] = useState('') // 댓글 입력 상태
   const [isQuickPostLoading, setIsQuickPostLoading] = useState(false) // 간편 등록 로딩 상태
   const { randomEmojis, latestMyEmoji, emojiPositions, isLoading, updateLatestEmoji } = useHighlights()
+  const isMobile = useMobile()
   
   // 이모지 상세 정보 조회 API
   const [getUserEmojiDetail, { isLoading: isDetailLoading }] = useLazyGetUserEmojiDetailQuery()
@@ -126,7 +128,7 @@ const Home = () => {
     </div>
     {/* 본인 이모지 */}
     <Emoji 
-      size="xl" 
+      size={isMobile ? "l" : "xl"} 
       number={latestMyEmoji?.emojiId || 999} 
       onClick={isLoggedIn ? handleMyEmojiClick : handleLoginClick} 
     />
@@ -164,7 +166,7 @@ const Home = () => {
           onClick={isLoggedIn ? () => handleRandomEmojiClick(Number(emoji.userEmojiId!)) : handleLoginClick}
         >
           <Emoji 
-            size="ml" 
+            size={isMobile ? "m" : "ml"} 
             number={emoji.emojiId} 
             className="opacity-80 hover:opacity-100 transition-opacity duration-300"
           />
@@ -174,14 +176,20 @@ const Home = () => {
     
     {/* 간편 등록 - MyPage가 열려있지 않을 때만 표시 */}
     {isLoggedIn && !isMyPageOpen && (
-      <div className="fixed bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center gap-3 w-full max-w-4xl px-4">
+      <div
+        className="fixed left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center gap-3 w-full max-w-4xl px-4"
+        style={{
+          bottom: '24px',
+          paddingBottom: '13px',
+        }}
+      >
         <QuickEmojiBar
           onPlusClick={() => setPostSheetOpen(true)}
           onEmojiClick={handleQuickEmojiClick}
           isLoggedIn={isLoggedIn}
           selectedEmojiId={selectedQuickEmoji}
         />
-        
+
         {/* 댓글 입력창 - 이모지 선택 시에만 표시 */}
         {selectedQuickEmoji && (
           <MainCommentInput
