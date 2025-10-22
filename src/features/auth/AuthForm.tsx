@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { formatTime } from '@/utils/time'
 import type { useAuthForm } from '@/hooks/useAuthForm'
 import useMobile from '@/hooks/useMobile'
+import Header from '@/components/Header'
 
 type AuthFormProps = ReturnType<typeof useAuthForm> & {
   submitButtonLabel: string
@@ -32,6 +33,7 @@ const AuthForm = ({
   const [passwordError, setPasswordError] = useState('')
   const isMobile = useMobile() // 모바일 구분
   const [isEmailSent, setIsEmailSent] = useState(false)
+  const [isSending, setIsSending] = useState(false) // 이메일 전송 로딩 상태
 
   // 타이머 훅
   const verificationTimer = useTimer(300)
@@ -40,14 +42,19 @@ const AuthForm = ({
   const handleSendVerificationWithTimer = async () => {
     // API 호출 전, 기존 메시지 초기화
     setEmailError('')
+    setIsSending(true) // 전송 시작 시 로딩 true
 
-    // handleSendVerification을 호출하고 성공 여부를 받습니다.
-    const isSuccess = await handleSendVerification()
+    try {
+      // handleSendVerification을 호출하고 성공 여부를 받습니다.
+      const isSuccess = await handleSendVerification()
 
-    if (isSuccess) {
-      verificationTimer.start()
-      resendTimer.start()
-      setIsEmailSent(true)
+      if (isSuccess) {
+        verificationTimer.start()
+        resendTimer.start()
+        setIsEmailSent(true)
+      }
+    } finally {
+      setIsSending(false) // 로딩 종료
     }
   }
 
@@ -92,15 +99,19 @@ const AuthForm = ({
 
   // 모바일 상단 헤더
   const MobileHeader = (
-    <div className='w-full pt-8 pb-6'>
-      <h1 className='text-4xl font-extrabold text-orange_five'>MOZI</h1>
+    <div className='w-full py-6'>
+      <Header
+        title={mode === 'register' ? '회원가입' : '비밀번호 찾기'}
+        showBackButton
+      />
       <p className='text-base font-medium mt-2'>
         {mode === 'register' ? '회원가입' : '비밀번호 찾기'}
       </p>
     </div>
   )
+
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col px-12'>
+    <form onSubmit={handleSubmit} className='flex flex-col px-6'>
       {isMobile && MobileHeader}
       <div className='space-y-7'>
         {showAuthFields && (
@@ -130,11 +141,13 @@ const AuthForm = ({
                 size='s'
                 baseButton
                 onClick={handleSendVerificationWithTimer}
+                loading={isSending}
                 disabled={
                   !!emailError ||
                   !email ||
                   resendTimer.isActive ||
-                  isAuthComplete
+                  isAuthComplete ||
+                  isSending
                 }
               />
             </div>
