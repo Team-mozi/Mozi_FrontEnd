@@ -7,7 +7,6 @@ import type { RootState } from '@/store/store'
 import LogoutModal from '@/features/modal/LogoutModal'
 import WithdrawalModal from '@/features/modal/WithdrawalModal'
 import useMobile from '@/hooks/useMobile'
-import Logo from '@/components/Logo'
 
 interface MyPageProps {
   onOpenChange?: (isOpen: boolean) => void
@@ -26,15 +25,19 @@ const MyPage = ({ onOpenChange }: MyPageProps) => {
     <>
       {isMobile ? (
         <BottomSheet.Content>
-          <Logo size='s'></Logo>
+          <p className='text-3xl font-extrabold text-orange_five pb-4'>
+            MyPage
+          </p>
           <p className='text-lg pb-1'>{nickname} 님</p>
           <p className='text-lg'>{email}</p>
         </BottomSheet.Content>
       ) : (
         <SideSheet.Content>
-          <div className='px-10'>
-            <Logo size='l'></Logo>
-            <p className='text-xl pb-2'>{nickname} 님</p>
+          <div className='p-10 space-y-2'>
+            <p className='text-4xl font-extrabold text-orange_five pb-2'>
+              MyPage
+            </p>
+            <p className='text-xl'>{nickname} 님</p>
             <p className='text-xl'>{email}</p>
           </div>
         </SideSheet.Content>
