@@ -75,6 +75,7 @@ export const useLogin = () => {
     password, // 비밀번호 상태
     setPassword, // 비밀번호 상태 변경 함수
     error, // 로그인 실패 메시지
+    setError,
     isLoading, // 로그인 API 호출 중 여부
     handleLogin, // 로그인 처리 함수
   }

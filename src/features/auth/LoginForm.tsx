@@ -2,7 +2,8 @@ import Input from '@/components/Input'
 import Button from '@/components/Button'
 import { useLogin } from '@/hooks/useLogin'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
+import { ToastContext } from '@/components/ToastProvider'
 
 const LoginForm = () => {
   const {
@@ -11,10 +12,13 @@ const LoginForm = () => {
     setEmail,
     setPassword,
     error,
+    setError,
     isLoading,
     handleLogin,
   } = useLogin()
+
   const navigate = useNavigate()
+  const toastContext = useContext(ToastContext)
 
   const handlePasswordReset = () => {
     navigate('/password-reset')
@@ -26,6 +30,18 @@ const LoginForm = () => {
   // 버튼 활성화 조건
   const isButtonDisabled =
     !email || !password || !!emailError || !!passwordError || isLoading
+
+  // 로그인 실패 시 Toast 표시
+  useEffect(() => {
+    if (error && toastContext) {
+      toastContext.showToast({
+        message: error,
+        messageType: 'error',
+        position: 'top-center',
+      })
+      setError('')
+    }
+  }, [error, toastContext, setError])
 
   return (
     <form onSubmit={handleLogin} className='flex flex-col w-full space-y-4'>
@@ -50,7 +66,6 @@ const LoginForm = () => {
           onErrorChange={setPasswordError}
           autoComplete='current-password'
         />
-        {error && <p className='text-red-500 text-sm'>{error}</p>}
       </div>
 
       <button

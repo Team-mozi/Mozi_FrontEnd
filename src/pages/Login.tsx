@@ -21,7 +21,7 @@ const Login = () => {
 
   // 모바일 헤더
   const MobileHeader = (
-    <div className='w-full px-12 pt-8'>
+    <div className='w-full px-6 pt-6'>
       <h1 className='text-4xl font-extrabold text-orange_five'>MOZI</h1>
       <p className='text-base font-medium mt-2'>
         당신의 하루, 하나의 이모지로 전하세요 😊
@@ -61,7 +61,7 @@ const Login = () => {
         )}
 
         {/* 로그인 폼 영역 */}
-        <div className='w-full flex flex-col justify-center items-center p-12'>
+        <div className='w-full flex flex-col justify-center items-center py-12 px-6'>
           <LoginForm />
 
           {/* 모바일 회원가입 버튼 */}
