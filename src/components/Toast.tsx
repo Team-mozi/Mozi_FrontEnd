@@ -69,7 +69,7 @@ const Toast = ({
   // 사이즈별 텍스트 및 레이아웃 스타일
   const sizeClasses = {
     s: 'min-w-[220px] py-2 px-5 text-sm',
-    m: 'min-w-[270px] py-3 px-4 text-base', // 기본값
+    m: 'min-w-[275px] py-3 px-3 text-base', // 기본값
     l: 'min-w-[320px] py-4 px-8 text-xl',
   }
 
